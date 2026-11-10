@@ -1,0 +1,114 @@
+---
+// «Як зв'язатися й оплатити» (concept 8.2 #5): the only olive band. Real channels (phone of the chosen city, bots 24/7),
+// the booking fields with an inactive send button (no fake submit), and payment facts C-014, C-019, C-027, C-028.
+import Icon from "./Icon.astro";
+import { cities, phones, generalPhone, bots, noteForm } from "../data/site";
+
+const p = phones[generalPhone];
+---
+<section id="how" class="how" aria-labelledby="how-title">
+  <div class="how__in container">
+    <div class="how__contact">
+      <h2 id="how-title" class="section__title">Як зв’язатися й оплатити</h2>
+
+      <div class="how__channels">
+        <p class="how__phone-wrap">
+          <span class="how__label">Безкоштовна лінія: <span data-city-label data-empty="загальна">загальна</span></span>
+          <a class="how__phone num" href={p.tel} data-phone><Icon name="phone" /><span data-phone-text>{p.display}</span></a>
+        </p>
+        <p class="how__bots">
+          <a class="how__bot" href={bots.telegram}><Icon name="telegram" />Telegram-бот</a>
+        </p>
+        <p class="how__bots-note">У чат-ботах оператори відповідають 24/7.</p>
+      </div>
+
+      <div class="book" role="group" aria-labelledby="book-title">
+        <h3 id="book-title" class="book__title">Онлайн-запис</h3>
+        <div class="book__fields">
+          <div class="field">
+            <label for="book-city">Місто</label>
+            <select id="book-city" name="city" autocomplete="address-level2">
+              <option value="">Оберіть місто</option>
+              {cities.map((c) => <option value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="book-dir">Напрям або лікар</label>
+            <input id="book-dir" name="direction" type="text" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="book-name">Ім’я</label>
+            <input id="book-name" name="name" type="text" autocomplete="given-name" />
+          </div>
+          <div class="field">
+            <label for="book-tel">Телефон</label>
+            <input id="book-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="book__send">
+          <span class="btn btn--outline future-link future-link--btn" role="link" aria-disabled="true" tabindex="0" aria-describedby="book-note">
+            Надіслати заявку
+            <span class="future-link__note" aria-hidden="true">{noteForm}</span>
+          </span>
+          <p id="book-note" class="book__note">{noteForm}. Записатися зараз можна телефоном або в чат-боті.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="how__pay">
+      <h3 class="how__pay-title">Оплата і пільги</h3>
+      <ul class="pay">
+        <li><strong>Поетапна оплата</strong> лікування</li>
+        <li>Оплата з сервісом <strong>«Миттєва розстрочка»</strong></li>
+        <li>Сервіс <strong>«Медасістанс ОН Клінік+»</strong></li>
+        <li><strong>Безкоштовний прийом за НСЗУ</strong>; декларацію з лікарем можна укласти в Дніпрі</li>
+        <li><strong>Цілодобова підтримка</strong> пацієнтів 24/7</li>
+      </ul>
+      <p class="how__price">Вартість послуг назве адміністратор під час запису.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how { background: var(--color-accent); color: var(--color-accent-ink); padding-block: var(--space-8); }
+  .how__in { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-7); align-items: start; }
+  .how__contact { grid-column: 1 / span 7; display: grid; gap: var(--space-6); }
+  .how__channels { display: grid; gap: var(--space-4); }
+  .how__phone-wrap { display: grid; gap: var(--space-1); }
+  .how__label { font-size: var(--text-small); font-weight: 600; }
+  .how__phone { display: inline-flex; align-items: center; gap: var(--space-3); justify-self: start; font-family: var(--font-display); font-weight: 300; font-size: var(--text-phone); line-height: 1.1; color: var(--color-accent-ink); text-decoration: none; white-space: nowrap; }
+  .how__phone :global(.icon) { width: 32px; height: 32px; }
+  @media (hover: hover) { .how__phone:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; } }
+  .how__bots { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-5); row-gap: var(--space-2); }
+  .how__bot { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; font-weight: 600; white-space: nowrap; text-underline-offset: 4px; }
+  @media (hover: hover) { .how__bot:hover { text-decoration-thickness: 2px; } }
+
+  .book { display: grid; gap: var(--space-4); padding-block-start: var(--space-6); border-block-start: 1px solid var(--color-rule); }
+  .book__title { font-size: var(--text-title); line-height: 1.15; }
+  .book__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .field { display: grid; gap: var(--space-1); }
+  .field label { font-size: var(--text-small); font-weight: 600; }
+  .field input, .field select { width: 100%; min-height: 48px; padding: 0 var(--space-3); border: 1.5px solid var(--color-accent-ink); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text); font: 400 var(--text-body)/1.2 var(--font-body); }
+  .field input:focus-visible, .field select:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  .book__send { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+  .book__send :global(.future-link__note) { left: 0; transform: translate(0, -4px); }
+  .book__send .future-link:hover :global(.future-link__note), .book__send .future-link:focus-visible :global(.future-link__note) { transform: none; }
+  .book__note { flex: 1 1 18rem; font-size: var(--text-small); }
+
+  .how__pay { grid-column: 9 / -1; display: grid; gap: var(--space-4); padding-block-start: var(--space-3); }
+  .how__pay-title { font-size: var(--text-title); line-height: 1.15; }
+  .pay { border-block-start: 1px solid var(--color-rule); }
+  .pay li { padding-block: var(--space-3); border-block-end: 1px solid var(--color-rule); }
+  .pay strong { font-weight: 600; }
+  .how__price { font-weight: 600; }
+
+  @media (max-width: 60rem) {
+    .how { padding-block: var(--space-7); }
+    .how__in { grid-template-columns: minmax(0, 1fr); }
+    .how__contact, .how__pay { grid-column: 1 / -1; }
+  }
+  @media (max-width: 40rem) {
+    .book__fields { grid-template-columns: minmax(0, 1fr); }
+    .how__phone :global(.icon) { width: 26px; height: 26px; }
+  }
+</style>

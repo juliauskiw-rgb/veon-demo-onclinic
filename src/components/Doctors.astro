@@ -1,0 +1,65 @@
+---
+// Doctors (concept 8.2 #3): a register, not a carousel. Three doctors from the client's homepage (home-desktop-s05.png);
+// portraits are the client's own photographs (attribute data-credit), cropped the same way.
+import FutureLink from "./FutureLink.astro";
+import { doctors, note } from "../data/site";
+---
+<section id="doctors" class="doctors section" aria-labelledby="doctors-title">
+  <div class="container">
+    <div class="doctors__head">
+      <h2 id="doctors-title" class="section__title">Лікарі</h2>
+      <FutureLink note={note} class="doctors__all">Усі лікарі</FutureLink>
+    </div>
+    <ul class="doctors__list">
+      {doctors.map((d, i) => (
+        <li class="doc" data-reveal style={`--reveal-delay:${i * 40}ms`}>
+          <picture class="doc__photo" data-credit="зображення клієнта">
+            <source srcset={`/img/doctor-${d.photo}.avif`} type="image/avif" />
+            <source srcset={`/img/doctor-${d.photo}.webp`} type="image/webp" />
+            <img src={`/img/doctor-${d.photo}.jpg`} width="240" height="240" alt={`${d.name}, фото`} loading="lazy" decoding="async" data-credit="зображення клієнта" />
+          </picture>
+          <div class="doc__who">
+            <h3 class="doc__name">{d.name}</h3>
+            <p class="doc__role">{d.role}</p>
+            <ul class="doc__tags" aria-label="Спеціалізація">{d.tags.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <dl class="doc__facts">
+            <div><dt>Категорія</dt><dd>{d.category}</dd></div>
+            <div><dt>Досвід</dt><dd>{d.years}</dd></div>
+            <div><dt>Оцінка пацієнтів</dt><dd class="num">{d.rating}, {d.reviews}</dd></div>
+          </dl>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .doctors { padding-block-start: 0; }
+  .doctors__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-5); margin-block-end: var(--space-6); }
+  .doctors__head :global(.doctors__all) { min-height: 44px; font-weight: 600; white-space: nowrap; }
+  .doctors__list { border-block-start: 1px solid var(--color-rule); }
+  .doc { display: grid; grid-template-columns: 112px repeat(11, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; padding-block: var(--space-5); border-block-end: 1px solid var(--color-rule); }
+  .doc__photo { grid-column: 1; }
+  .doc__photo img { width: 112px; height: 112px; border-radius: var(--radius); object-fit: cover; background: var(--color-well); }
+  .doc__who { grid-column: 2 / span 6; display: grid; gap: var(--space-2); }
+  .doc__name { font-size: var(--text-title); line-height: 1.15; letter-spacing: -0.01em; }
+  .doc__role { color: var(--color-muted); }
+  .doc__tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .doc__tags li { padding: 2px var(--space-2); border-radius: var(--radius); background: var(--color-well); font-size: var(--text-small); }
+  .doc__facts { grid-column: 8 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; }
+  .doc__facts dt { font-size: var(--text-small); color: var(--color-muted); }
+  .doc__facts dd { margin: 0; font-weight: 600; }
+
+  @media (max-width: 60rem) {
+    .doc { grid-template-columns: 88px minmax(0, 1fr); row-gap: var(--space-4); align-items: start; }
+    .doc__photo img { width: 88px; height: 88px; }
+    .doc__who { grid-column: 2; }
+    .doc__facts { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 40rem) {
+    .doc__facts { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+    .doc__facts div { display: flex; justify-content: space-between; gap: var(--space-4); }
+    .doc__facts dd { text-align: end; }
+  }
+</style>

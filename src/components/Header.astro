@@ -1,0 +1,144 @@
+---
+// Two bars (concept 5, «Навігація»): blue service bar (sticky) + paper menu bar (not sticky).
+// Under 60rem: logo · city · call icon · menu (a <details>, works without scripts).
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { phones, generalPhone, bots, note } from "../data/site";
+
+const p = phones[generalPhone];
+const menu: { label: string; href?: string }[] = [
+  { label: "Напрями" },
+  { label: "Діагностика" },
+  { label: "Аналізи (ОН ЛАБ)" },
+  { label: "Лікарі" },
+  { label: "Дитячі центри" },
+  { label: "Центри та адреси", href: "#centers" },
+  { label: "Пацієнтам" },
+];
+---
+<header class="service on-field" data-rec="R-102,R-104">
+  <div class="service__in container">
+    <a class="service__logo" href="#top" aria-label="ОН Клінік, на початок сторінки">
+      <img class="logo-wide" src="/img/logo-onclinic.svg" width="112" height="40" alt="" />
+      <img class="logo-narrow" src="/img/logo-onclinic-mobile.svg" width="32" height="35" alt="" />
+    </a>
+
+    <a class="service__city" href="#cities" data-rec="R-104">
+      <span class="visually-hidden">Місто:</span>
+      <span class="service__city-name" data-city-label data-empty="Оберіть місто">Оберіть місто</span>
+      <Icon name="chevron" class="service__chev" />
+    </a>
+
+    <div class="service__end">
+      <a class="service__phone num" href={p.tel} data-phone data-rec="R-102">
+        <Icon name="phone" />
+        <span class="service__phone-text" data-phone-text>{p.display}</span>
+        <span class="visually-hidden">, безкоштовно</span>
+      </a>
+      <a class="service__bot" href={bots.telegram} aria-label="Telegram-бот ОН Клінік, оператори 24/7"><Icon name="telegram" /></a>
+      <a class="btn btn--primary btn--sm service__book" href="#how">Записатися</a>
+
+      <details class="mmenu" data-rec="R-107">
+        <summary class="mmenu__toggle" aria-label="Меню">
+          <Icon name="menu" class="mmenu__open" />
+          <Icon name="close" class="mmenu__close" />
+        </summary>
+        <div class="mmenu__panel">
+          <nav aria-label="Меню (мобільне)">
+            <ul class="mmenu__list">
+              {menu.map((m) => (
+                <li>{m.href ? <a href={m.href}>{m.label}</a> : <FutureLink note={note}>{m.label}</FutureLink>}</li>
+              ))}
+            </ul>
+          </nav>
+          <ul class="mmenu__extra">
+            <li><a class="text-link" href="#how">Записатися</a></li>
+            <li><a class="text-link" href={bots.telegram}>Telegram-бот</a></li>
+            <li><FutureLink note={note}>Пошук</FutureLink></li>
+            <li><FutureLink note={note}>Кабінет пацієнта</FutureLink></li>
+            <li><span aria-current="true">UK</span> <FutureLink note={note}>RU</FutureLink></li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<nav class="menubar" aria-label="Головне меню" data-rec="R-107">
+  <div class="menubar__in container">
+    <ul class="menubar__list">
+      {menu.map((m) => (
+        <li>{m.href ? <a class="menubar__link" href={m.href}>{m.label}</a> : <FutureLink note={note} class="menubar__link">{m.label}</FutureLink>}</li>
+      ))}
+    </ul>
+    <ul class="menubar__tools">
+      <li><FutureLink note={note} class="menubar__tool"><Icon name="search" /><span class="tool-text">Пошук</span></FutureLink></li>
+      <li><FutureLink note={note} class="menubar__tool"><Icon name="user" /><span class="tool-text">Кабінет пацієнта</span></FutureLink></li>
+      <li class="menubar__lang"><span aria-current="true">UK</span><FutureLink note={note} class="menubar__tool">RU</FutureLink></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .service { position: sticky; top: 0; z-index: 40; background: var(--color-field); color: var(--color-on-field); }
+  .service__in { display: flex; align-items: center; gap: var(--space-5); height: var(--service-h); }
+  .service__logo { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .logo-wide { width: 112px; height: 40px; }
+  .logo-narrow { display: none; width: 32px; height: 35px; }
+  .service__city { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 44px; padding: 0 var(--space-3); border: 1.5px solid var(--color-rule-on-field); border-radius: var(--radius); color: var(--color-on-field); text-decoration: none; font-weight: 600; white-space: nowrap; transition: background-color var(--dur-micro) var(--ease-out); }
+  :global(.service__chev) { width: 18px; height: 18px; }
+  .service__end { display: flex; align-items: center; gap: var(--space-2); margin-inline-start: auto; }
+  .service__phone { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding: 0 var(--space-3); color: var(--color-on-field); text-decoration: none; font-weight: 600; font-size: var(--text-lead); white-space: nowrap; }
+  .service__bot { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius); color: var(--color-on-field); transition: background-color var(--dur-micro) var(--ease-out); }
+  .service__book { margin-inline-start: var(--space-3); }
+  @media (hover: hover) {
+    .service__city:hover, .service__bot:hover, .service__phone:hover { background: var(--color-field-hover); border-radius: var(--radius); }
+  }
+
+  .mmenu { display: none; position: static; }
+  .mmenu__toggle { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius); cursor: pointer; list-style: none; }
+  .mmenu__toggle::-webkit-details-marker { display: none; }
+  .mmenu :global(.mmenu__close) { display: none; }
+  .mmenu[open] :global(.mmenu__open) { display: none; }
+  .mmenu[open] :global(.mmenu__close) { display: block; }
+  .mmenu__panel { position: absolute; inset-inline: 0; top: 100%; max-height: calc(100dvh - var(--service-h)); overflow-y: auto; background: var(--color-bg); color: var(--color-text); padding: var(--space-4) var(--gutter) var(--space-6); border-block-end: 1px solid var(--color-rule); }
+  .mmenu__panel :focus-visible { outline-color: var(--color-focus); }
+  .mmenu__list li { border-block-end: 1px solid var(--color-rule); }
+  .mmenu__list a, .mmenu__list :global(.future-link) { white-space: nowrap; display: flex; align-items: center; min-height: 52px; font-size: var(--text-lead); font-weight: 600; text-decoration: none; }
+  .mmenu__list :global(.future-link__note) { left: auto; right: 0; transform: none; top: 50%; translate: 0 -50%; }
+  .mmenu__extra { display: grid; gap: var(--space-2); padding-block-start: var(--space-4); }
+  .mmenu__extra li { white-space: nowrap; display: flex; align-items: center; gap: var(--space-3); min-height: 44px; }
+  .mmenu__extra :global(.future-link__note) { left: 0; transform: none; }
+
+  .menubar { background: var(--color-bg); border-block-end: 1px solid var(--color-rule); }
+  .menubar__in { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); min-height: var(--menu-h); }
+  .menubar__list, .menubar__tools { display: flex; align-items: center; gap: var(--space-1); }
+  .menubar__list :global(.menubar__link) { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-3); font-size: var(--text-small); font-weight: 600; white-space: nowrap; color: var(--color-text); border-radius: var(--radius); }
+  .menubar__list a.menubar__link { text-decoration: underline; text-decoration-color: var(--color-link); text-underline-offset: 4px; }
+  .menubar__tools :global(.menubar__tool) { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding: 0 var(--space-2); font-size: var(--text-small); color: var(--color-muted); white-space: nowrap; }
+  .menubar__tools :global(.icon) { width: 18px; height: 18px; }
+  .menubar__lang { display: flex; align-items: center; gap: var(--space-2); padding-inline-start: var(--space-3); margin-inline-start: var(--space-2); border-inline-start: 1px solid var(--color-rule); font-size: var(--text-small); font-weight: 600; }
+
+  @media (max-width: 75rem) {
+    .menubar__tools .tool-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .menubar__tools :global(.menubar__tool) { min-width: 44px; justify-content: center; }
+    .menubar__in { gap: var(--space-3); }
+    .menubar__list { gap: 0; }
+    .menubar__list :global(.menubar__link) { padding: 0 var(--space-2); }
+    .menubar__lang { padding-inline-start: var(--space-2); margin-inline-start: 0; }
+    .service__phone { font-size: var(--text-body); }
+  }
+  @media (max-width: 60rem) {
+    .menubar { display: none; }
+    .logo-wide { display: none; }
+    .logo-narrow { display: block; }
+    .service__in { gap: var(--space-3); }
+    .service__bot, .service__book { display: none; }
+    .service__phone-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .service__phone { width: 44px; justify-content: center; padding: 0; }
+    .service__phone :global(.icon) { width: 24px; height: 24px; }
+    .service__end { gap: var(--space-1); }
+    .mmenu { display: block; }
+    .service__city { font-size: var(--text-small); padding: 0 var(--space-2) 0 var(--space-3); }
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+// Homepage of ОН Клінік (design/concept.md, sections: hero, routes, doctors, reviews, how, offers, useful, centers, footer).
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Routes from "../components/Routes.astro";
+import Doctors from "../components/Doctors.astro";
+import Reviews from "../components/Reviews.astro";
+import How from "../components/How.astro";
+import Offers from "../components/Offers.astro";
+import Useful from "../components/Useful.astro";
+import Centers from "../components/Centers.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { cities, phones } from "../data/site";
+
+const title = "ОН Клінік — мережа медичних центрів в 11 містах України";
+const description = "Медичні центри ОН Клінік у Харкові, Дніпрі, Одесі та ще 8 містах: лікарі, діагностика, аналізи ОН ЛАБ, дитячі центри. Безкоштовна лінія 0 800.";
+
+// Structured data: only facts from client.json; no rating, no unconfirmed social profiles (concept 8.5)
+const ld = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MedicalOrganization",
+      "@id": "#org",
+      name: "ОН Клінік",
+      legalName: "MEDICAL ADVANCED LLC",
+      description: "Мережа медичних центрів ОН Клінік",
+      telephone: "0 800 30 11 77",
+      areaServed: "UA",
+    },
+    ...cities.map((c) => ({
+      "@type": "MedicalClinic",
+      name: `ОН Клінік ${c.name}`,
+      parentOrganization: { "@id": "#org" },
+      telephone: phones[c.phone].display,
+      address: c.addresses.map((a) => ({ "@type": "PostalAddress", streetAddress: a, addressLocality: c.name, addressCountry: "UA" })),
+    })),
+  ],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" data-rec="R-302" is:inline set:html={JSON.stringify(ld)} />
+  <Header slot="header" />
+  <Hero />
+  <Routes />
+  <Doctors />
+  <Reviews />
+  <How />
+  <Offers />
+  <Useful />
+  <Centers />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>
+<script src="../scripts/city.ts"></script>

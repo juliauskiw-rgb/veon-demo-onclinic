@@ -1,0 +1,34 @@
+---
+// Mobile bottom bar (concept 8.4, R-106): «Подзвонити | Записатися», shown after the first screen, nothing floats over it.
+import Icon from "./Icon.astro";
+import { phones, generalPhone } from "../data/site";
+const p = phones[generalPhone];
+---
+<div class="mbar" data-mbar data-rec="R-106">
+  <a class="btn btn--primary mbar__call" href={p.tel} data-phone><Icon name="phone" />Подзвонити<span class="visually-hidden" data-phone-text>{p.display}</span></a>
+  <a class="btn btn--outline mbar__book" href="#how">Записатися</a>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-mbar]");
+  const hero = document.getElementById("hero");
+  const how = document.getElementById("how");
+  if (bar && hero && "IntersectionObserver" in window) {
+    bar.classList.add("is-hidden");
+    let heroIn = true;
+    let howIn = false;
+    const sync = () => bar.classList.toggle("is-hidden", heroIn || howIn);
+    new IntersectionObserver(([e]) => { heroIn = e.isIntersecting; sync(); }, { rootMargin: "-40% 0px 0px 0px" }).observe(hero);
+    if (how) new IntersectionObserver(([e]) => { howIn = e.isIntersecting; sync(); }, { threshold: 0.25 }).observe(how);
+  }
+</script>
+
+<style>
+  .mbar { display: none; }
+  @media (max-width: 60rem) {
+    .mbar { position: fixed; inset-inline: 0; bottom: 0; z-index: 35; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-2); padding: var(--space-2) var(--gutter) max(var(--space-2), env(safe-area-inset-bottom)); background: var(--color-bg); border-block-start: 1px solid var(--color-rule); transition: transform var(--dur-short) var(--ease-out), opacity var(--dur-short) var(--ease-out); }
+    .mbar .btn { min-height: 48px; padding: 0 var(--space-3); }
+    .mbar.is-hidden { transform: translateY(100%); opacity: 0; pointer-events: none; visibility: hidden; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mbar { transition: none; } }
+</style>

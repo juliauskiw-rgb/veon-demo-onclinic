@@ -1,0 +1,45 @@
+---
+// Reviews (concept 8.2 #4): one verbatim review from the client's homepage set large, with its attribution.
+import FutureLink from "./FutureLink.astro";
+import { review, note } from "../data/site";
+---
+<section id="reviews" class="reviews section" aria-labelledby="reviews-title">
+  <div class="reviews__in container">
+    <h2 id="reviews-title" class="section__title reviews__title">Відгуки пацієнтів</h2>
+    <figure class="quote">
+      <blockquote class="quote__text"><p>«{review.text}»</p></blockquote>
+      <figcaption class="quote__by">
+        <dl class="quote__meta">
+          <div><dt>Автор</dt><dd>{review.author}, <time datetime={review.dateIso} class="num">{review.date}</time></dd></div>
+          <div><dt>Лікар</dt><dd>{review.physician}</dd></div>
+          <div><dt>Оцінка</dt><dd class="num">{review.rating}</dd></div>
+          <div><dt>Джерело</dt><dd>{review.source}</dd></div>
+        </dl>
+      </figcaption>
+    </figure>
+    <p class="reviews__more">
+      <FutureLink note={note}>Читати всі відгуки</FutureLink>
+      <FutureLink note={note}>Залишити відгук</FutureLink>
+    </p>
+  </div>
+</section>
+
+<style>
+  .reviews { border-block-start: 1px solid var(--color-rule); }
+  .reviews__in { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--space-6); }
+  .reviews__title { grid-column: 1 / span 4; }
+  .quote { grid-column: 5 / -1; margin: 0; display: grid; gap: var(--space-6); }
+  .quote__text { margin: 0; }
+  .quote__text p { font-family: var(--font-display); font-weight: 300; font-size: var(--text-section); line-height: 1.2; letter-spacing: -0.015em; text-indent: -0.4em; max-width: 32ch; }
+  .quote__meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding-block-start: var(--space-4); border-block-start: 1px solid var(--color-rule); }
+  .quote__meta dt { font-size: var(--text-small); color: var(--color-muted); }
+  .quote__meta dd { margin: 0; font-weight: 600; }
+  .reviews__more { grid-column: 5 / -1; display: flex; flex-wrap: wrap; column-gap: var(--space-6); row-gap: var(--space-2); }
+  .reviews__more :global(.future-link) { min-height: 44px; font-weight: 600; white-space: nowrap; }
+
+  @media (max-width: 60rem) {
+    .reviews__in { grid-template-columns: minmax(0, 1fr); }
+    .reviews__title, .quote, .reviews__more { grid-column: 1 / -1; }
+    .quote__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
