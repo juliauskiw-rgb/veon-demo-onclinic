@@ -15,12 +15,13 @@ const menu: { label: string; href?: string }[] = [
   { label: "Центри та адреси", href: "#centers" },
   { label: "Пацієнтам" },
 ];
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 <header class="service on-field" data-rec="R-102,R-104">
   <div class="service__in container">
     <a class="service__logo" href="#top" aria-label="ОН Клінік, на початок сторінки">
-      <img class="logo-wide" src="/img/logo-onclinic.svg" width="112" height="40" alt="" />
-      <img class="logo-narrow" src="/img/logo-onclinic-mobile.svg" width="32" height="35" alt="" />
+      <img class="logo-wide" src={`${base}img/logo-onclinic.svg`} width="112" height="40" alt="" />
+      <img class="logo-narrow" src={`${base}img/logo-onclinic-mobile.svg`} width="32" height="35" alt="" />
     </a>
 
     <a class="service__city" href="#cities" data-rec="R-104">

@@ -4,12 +4,13 @@
 import FutureLink from "./FutureLink.astro";
 import Icon from "./Icon.astro";
 import { phones, phoneOrder, bots, note } from "../data/site";
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 <footer id="footer" class="footer on-ink">
   <div class="footer__in container">
     <div class="footer__brand">
       <a class="footer__logo" href="#top" aria-label="ОН Клінік, на початок сторінки">
-        <img src="/img/logo-onclinic.svg" width="112" height="40" alt="" />
+        <img src={`${base}img/logo-onclinic.svg`} width="112" height="40" alt="" />
       </a>
       <p>Мережа медичних центрів ОН Клінік</p>
       <p class="footer__bots">

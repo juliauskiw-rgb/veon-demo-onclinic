@@ -3,6 +3,7 @@
 // portraits are the client's own photographs (attribute data-credit), cropped the same way.
 import FutureLink from "./FutureLink.astro";
 import { doctors, note } from "../data/site";
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 <section id="doctors" class="doctors section" aria-labelledby="doctors-title">
   <div class="container">
@@ -14,9 +15,9 @@ import { doctors, note } from "../data/site";
       {doctors.map((d, i) => (
         <li class="doc" data-reveal style={`--reveal-delay:${i * 40}ms`}>
           <picture class="doc__photo" data-credit="зображення клієнта">
-            <source srcset={`/img/doctor-${d.photo}.avif`} type="image/avif" />
-            <source srcset={`/img/doctor-${d.photo}.webp`} type="image/webp" />
-            <img src={`/img/doctor-${d.photo}.jpg`} width="240" height="240" alt={`${d.name}, фото`} loading="lazy" decoding="async" data-credit="зображення клієнта" />
+            <source srcset={`${base}img/doctor-${d.photo}.avif`} type="image/avif" />
+            <source srcset={`${base}img/doctor-${d.photo}.webp`} type="image/webp" />
+            <img src={`${base}img/doctor-${d.photo}.jpg`} width="240" height="240" alt={`${d.name}, фото`} loading="lazy" decoding="async" data-credit="зображення клієнта" />
           </picture>
           <div class="doc__who">
             <h3 class="doc__name">{d.name}</h3>
